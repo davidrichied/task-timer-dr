@@ -227,25 +227,34 @@ $(function() {
     $('#options-row-template').clone().attr('id', 'options-task').appendTo('table#task-list tbody');
     $('#options-task').show();
 
-    $( "select" )
-      .change(function () {
-        var task_num = 0;
-          var selected_option = $( "select option:selected" );
-          var selected_option_text = selected_option[0].text;
-          console.log(selected_option_text);
-          $( "select option:selected" ).each(function() {
-      update_task_text(task_num);
-    });
-          $.each(tasks, function() {
-
-            if (selected_option_text == this.text) {
-                console.log("match");
+    $( "#options" )
+        .change(function () {
+            var task_num = 0;
+            var selected_option = $( "#options option:selected" );
+            var selected_option_text = selected_option[0].text;
+            console.log(selected_option_text);
+            $( "#options option:selected" ).each(function() {
                 update_task_text(task_num);
-            } else {
-                task_num++;
-            }
-          })
-      });
+            });
+            $.each(tasks, function() {
+                if (selected_option_text == this.text) {
+                    console.log("match");
+                    update_task_text(task_num);
+                } else {
+                    task_num++;
+                }      
+            })
+        });
+
+            $( "#totals-options" )
+                .change(function () {
+
+                    var selected_option = $( "#totals-options option:selected" );
+                    var selected_option_text = selected_option[0].text;
+
+                    get_totals(selected_option_text)
+                ;
+            })
 
       function update_task_text(task) {
         console.log("update_task_text");

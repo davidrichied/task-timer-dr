@@ -436,10 +436,16 @@ function task_info(task, user_triggered, anim, progress) {
     } catch(e) {
         js_error(e);
     }
+
+
+    get_day_totals();
+
+
 }
 
 // Display the history for a task
 function show_history(y, m, d) {
+
     try {
         if(typeof tasks[displaying_task].history != 'undefined' && typeof tasks[displaying_task].history[y] != 'undefined' && typeof tasks[displaying_task].history[y][m - 1] != 'undefined' && typeof tasks[displaying_task].history[y][m - 1][d] != 'undefined') {
             // Clear out the list, and show it
@@ -451,13 +457,18 @@ function show_history(y, m, d) {
             // Make a row for each hour that there was time spent
             for(h = 0; h <= 23; h++) {
                 if(typeof tasks[displaying_task].history[y][m - 1][d][h] != 'undefined') {
+
                     $('<tr />')
                         .append('<td>'+ (Setting('12-hour') ? (h === 0 ? '12' : (h > 12 ? h - 12 : h)) : h) +':00'+ (Setting('12-hour') ? (h >= 12 ? ' PM' : ' AM') : '') +'</td>')
                         .append('<td>'+ format_time(tasks[displaying_task].history[y][m - 1][d][h].hours, tasks[displaying_task].history[y][m - 1][d][h].mins, tasks[displaying_task].history[y][m - 1][d][h].secs) +'</td>')
                         .appendTo('#history tbody')
                     ;
+
                 }
             }
+
+
+
         } else {
             // No history for that day
             $('#history').fadeOut(400, function() {
@@ -468,6 +479,110 @@ function show_history(y, m, d) {
         js_error(e);
     }
 }
+
+
+
+
+function get_day_totals() {
+    var today = new Date();
+    var current_month = today.getMonth();
+    var current_year = today.getFullYear();
+    var current_day = today.getDate();
+    var day_totals = 0;
+    $.each(tasks[displaying_task].history[current_year][current_month][current_day], function() {
+        day_totals += this.secs;
+        day_totals += this.mins * 60;
+        day_totals += this.hours * 60 * 60;
+    });
+    $('#totals-history tbody').empty();
+    $('<tr />')
+        .append('<td>'+ secondsTimeSpanToHMS(day_totals) +'</td>')
+        .appendTo('#totals-history tbody')
+    ;
+}
+
+function get_week_totals() {
+    var today = new Date();
+    var current_month = today.getMonth();
+    var current_year = today.getFullYear();
+    var current_day = today.getDate();
+    var weekday_num = today.getDay() - 1;
+    var week_totals = 0;
+    while (weekday_num > -1) {
+        if (tasks[displaying_task].history[current_year][current_month][current_day - weekday_num]) {
+            $.each(tasks[displaying_task].history[current_year][current_month][current_day - weekday_num], function() {
+                week_totals += this.secs;
+                week_totals += this.mins * 60;
+                week_totals += this.hours * 60 * 60;
+            });
+            weekday_num = weekday_num - 1;
+          } else {
+            weekday_num = weekday_num - 1;
+        }            
+    }
+    $('#totals-history tbody').empty();
+    $('<tr />')
+        .append('<td>'+ secondsTimeSpanToHMS(week_totals) +'</td>')
+        .appendTo('#totals-history tbody')
+    ;
+    console.log(week_totals);
+}
+
+function get_month_totals() {
+    var today = new Date();
+    var current_month = today.getMonth();
+    var current_year = today.getFullYear();
+    var current_day = today.getDate();
+    var days_of_month = new Date(current_year, current_month, 0).getDate();
+    var month_totals = 0;
+    $.each(tasks[displaying_task].history[current_year][current_month], function() {
+        while (days_of_month > 0) {
+            if (tasks[displaying_task].history[current_year][current_month][days_of_month]) {
+                $.each(tasks[displaying_task].history[current_year][current_month][days_of_month], function() {
+                    month_totals += this.secs;
+                    month_totals += this.mins * 60;
+                    month_totals += this.hours * 60 * 60;
+                });
+            }
+            days_of_month = days_of_month - 1;
+        }
+    });
+
+    $('#totals-history tbody').empty();
+    $('<tr />')
+        .append('<td>'+ secondsTimeSpanToHMS(month_totals) +'</td>')
+        .appendTo('#totals-history tbody')
+    ;
+}
+    
+
+function get_totals(which_total) {
+    if(which_total == "Today's Total") {
+        get_day_totals();
+    } else if(which_total == "Week's Total") {
+        get_week_totals();
+    } else if(which_total == "Month's Total") {
+        get_month_totals();
+    } 
+}
+
+
+function secondsTimeSpanToHMS(s) {
+    var h = Math.floor(s/3600); //Get whole hours
+    s -= h*3600;
+    var m = Math.floor(s/60); //Get remaining minutes
+    s -= m*60;
+    return h+":"+(m < 10 ? '0'+m : m)+":"+(s < 10 ? '0'+s : s); //zero padding on minutes and seconds
+}
+
+
+
+
+
+
+
+
+
 
 // Load the settings for the task that is being displayed in the task menu
 function LoadTaskSettings(task) {
