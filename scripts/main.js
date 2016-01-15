@@ -205,6 +205,63 @@ $(function() {
     } catch(e) {
         js_error(e);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var options = $("#options");
+        $.each(tasks, function() {
+            options.append($("<option />").val(this.text).text(this.text));
+    });
+
+    $('#options-row-template').clone().attr('id', 'options-task').appendTo('table#task-list tbody');
+    $('#options-task').show();
+
+    $( "select" )
+      .change(function () {
+        
+          var selected_option = $( "select option:selected" );
+          var selected_option_text = selected_option[0].text;
+          console.log(selected_option_text);
+          $.each(tasks, function() {
+            if (selected_option_text == this.text) {
+                update_task_text(this);
+            }
+          })
+      });
+
+      function update_task_text(task) {
+        // Text
+        console.log($('#options-task td.current'));
+        $('#options-task td.current').text(format_time(task.current_hours, task.current_mins, task.current_secs));
+        $('#options-task td.goal').text(format_time(task.goal_hours, task.goal_mins, 0, task.indefinite));
+        $('options-task button.toggle').text(task.last_tick ? locale('btnStop') : locale('btnStart'));
+        $('options-task img.toggle').attr('title', task.last_tick ? locale('btnStop') : locale('btnStart')).attr('src', 'style/images/control_'+ (task.last_tick ? 'pause' : 'play') +'_blue.png');
+        console.log(task);
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 // Rebuild the task list
