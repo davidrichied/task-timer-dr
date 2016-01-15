@@ -279,19 +279,34 @@ $(function() {
         });
       }
 
-      
-
-
-
-
-
-
-
-
-
 
 
 });
+
+function rebuild_options_list() {
+    $('#options-row-template').clone().attr('id', 'options-task').appendTo('table#task-list tbody');
+    $('#options-task').show();
+
+    var options = $("#options");
+    options.empty();
+    $.each(tasks, function() {
+            options.append($("<option />").val(this.text).text(this.text));
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Rebuild the task list
 function rebuild_list() {
@@ -303,11 +318,17 @@ function rebuild_list() {
         list_task(i, 0);
     }
 
+    rebuild_options_list();
+
     $(window).scrollTop(scroll);
     $('table#task-list').tableDnDUpdate();
     rebuild_totals();
     rebuild_charts();
+
+
+
 }
+
 
 // Rebuild the totals row
 function rebuild_totals() {
