@@ -137,6 +137,12 @@ function update_time() {
                     $('tr#task-'+ i +' progress').val(progress).attr('max', '100').text(progress.toString() +'%');
                 }
 
+                // Update list
+                $('tr#options-task td.current').text(format_time(tasks[i].current_hours, tasks[i].current_mins, tasks[i].current_secs));
+                if(!tasks[i].indefinite) {
+                    $('tr#options-task progress').val(progress).attr('max', '100').text(progress.toString() +'%');
+                }
+
                 // Update task menu if it's shown for this task
                 if(displaying_task == i) task_info(i, false, progress);
             }
@@ -247,8 +253,10 @@ function clear_history(task) {
 
 // Toggle whether a task is running or not
 function toggle_task(task, update) {
+    console.log("toggle_task");
     try {
         if(tasks[task].last_tick) {
+            console.log("toggle_task if statement");
             // Force the time to update
             if(update) {
                 clearTimeout(timer);
@@ -267,6 +275,7 @@ function toggle_task(task, update) {
             // Cancel the future alarm for the task reaching its goal
             chrome.alarms.clear('task-' + task);
         } else {
+            console.log("toggle_task else statement")
             // Disable other tasks if they have it set to allow only one running at a time
             if(Setting('only-one')) {
                 for(var i = 0; i < task_count; i++) {

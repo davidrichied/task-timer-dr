@@ -229,28 +229,57 @@ $(function() {
 
     $( "select" )
       .change(function () {
-        
+        var task_num = 0;
           var selected_option = $( "select option:selected" );
           var selected_option_text = selected_option[0].text;
           console.log(selected_option_text);
+          $( "select option:selected" ).each(function() {
+      update_task_text(task_num);
+    });
           $.each(tasks, function() {
+
             if (selected_option_text == this.text) {
-                update_task_text(this);
+                console.log("match");
+                update_task_text(task_num);
+            } else {
+                task_num++;
             }
           })
       });
 
       function update_task_text(task) {
+        console.log("update_task_text");
         // Text
-        console.log($('#options-task td.current'));
-        $('#options-task td.current').text(format_time(task.current_hours, task.current_mins, task.current_secs));
-        $('#options-task td.goal').text(format_time(task.goal_hours, task.goal_mins, 0, task.indefinite));
-        $('options-task button.toggle').text(task.last_tick ? locale('btnStop') : locale('btnStart'));
-        $('options-task img.toggle').attr('title', task.last_tick ? locale('btnStop') : locale('btnStart')).attr('src', 'style/images/control_'+ (task.last_tick ? 'pause' : 'play') +'_blue.png');
-        console.log(task);
+        $('#options-task td.current').text(format_time(tasks[task].current_hours, tasks[task].current_mins, tasks[task].current_secs));
+        $('#options-task td.goal').text(format_time(tasks[task].goal_hours, tasks[task].goal_mins, 0, tasks[task].indefinite));
+        $('options-task button.toggle').text(tasks[task].last_tick ? locale('btnStop') : locale('btnStart'));
+        $('options-task img.toggle').attr('title', tasks[task].last_tick ? locale('btnStop') : locale('btnStart')).attr('src', 'style/images/control_'+ (tasks[task].last_tick ? 'pause' : 'play') +'_blue.png');
+
+        // Unbind Events
+        $('#options-task .toggle').unbind();
+        $('#options-task .info').unbind();
+        $('#options-task .reset').unbind();
+        $('#options-task .delete').unbind();
+
+              // Option Buttons
+        $('#options-task .toggle').attr('name', task).click(function() {
+            if(!$(this).hasClass('disabled')) toggle_task(parseInt($(this).attr('name'), 10), true);
+        });
+        $('#options-task .info').attr('name', task).click(function() {
+            if(!$(this).hasClass('disabled')) task_info(parseInt($(this).attr('name'), 10), true, true, false);
+        });
+        $('#options-task .reset').attr('name', task).click(function() {
+            if(!$(this).hasClass('disabled')) reset_task(parseInt($(this).attr('name'), 10));
+        });
+        $('#options-task .delete').attr('name', task).click(function() {
+            if(!$(this).hasClass('disabled')) {
+                cancel_edit();
+                delete_task(parseInt($(this).attr('name'), 10));
+            }
+        });
       }
 
-
+      
 
 
 
