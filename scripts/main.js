@@ -215,7 +215,31 @@ $(function() {
 
 
 
+    function update_current_time (task) {
+        var today = new Date();
+        var current_month = today.getMonth();
+        var current_year = today.getFullYear();
+        var current_day = today.getDate();
+        var day_totals = 0;
+        $.each(tasks[task].history[current_year][current_month][current_day], function() {
+            day_totals += this.secs;
+            day_totals += this.mins * 60;
+            day_totals += this.hours * 60 * 60;
+        });
+        var h = Math.floor(s/3600); //Get whole hours
+        day_totals -= h*3600;
+        var m = Math.floor(s/60); //Get remaining minutes
+        day_totals -= m*60;
 
+        tasks[task].current_hours = h;
+        tasks[task].current_mins = m;
+        tasks[task].current_secs = day_totals;
+
+        // $('#totals-history tbody').empty();
+        // $('<tr />')
+        //     .append('<td>'+ secondsTimeSpanToHMS(day_totals) +'</td>')
+        //     .appendTo('#totals-history tbody');
+    }
 
 
 
@@ -287,6 +311,9 @@ $(function() {
             }
         });
       }
+
+
+
 
 
 

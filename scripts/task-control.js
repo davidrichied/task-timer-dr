@@ -65,6 +65,7 @@ function update_time() {
 
                 // Historical time
                 if(Setting('track-history')) {
+                    console.log('track-history is enabled');
                     // Make sure the object exists all the way down
                     if(typeof tasks[i].history == 'undefined') tasks[i].history = {};
                     if(typeof tasks[i].history[year] == 'undefined') tasks[i].history[year] = {};
@@ -623,3 +624,4 @@ function task_progress(task) {
     if(progress == Infinity) progress = 100;
     return progress;
 }
+

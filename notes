@@ -1,3 +1,22 @@
+commit 0ec69b2bd08c6020d54dd1a5554e0ff3ad3ca030
+Author: David Richied <davidrichied@gmail.com>
+Date:   Sat Jan 30 10:04:40 2016 -0500
+
+    Fixed small bug. Getting ready to change time spent and totals to reflect only the totals for the day and not all-time totals
+
+    To change the Time Spent to reflect only the totals for the day, I will most likely have to change the function that displays it to grab the totals for the day. I will also have to rewrite the function that displays the all-time totals.
+
+    EDITING TIME
+    Before I do that, I want to edit the Edit function to update the historical time (subtract if time is removed and add if time is added). To make the use of historical time more smooth, everything should reference the historical time. The total time spent on one task can be twenty-four hours or less; however, the user cannot subtract more than the amount of time that already exists. E.g., if they accidentally forget to start the clock, they can add time, or they can remove time if they forgot to stop the timer, but they can only remove as much time as was added.
+    To reference the historical time, I can reuse the function I created earlier to display the day's total time spent. The function will have to run immediately to display the current time.
+    Goal will have to continue to reference the total Time Spent. It will also be a good idea to create a Today goal, a Week goal, etc. I will have to find out what Goal references. If it does not reference historical time, I will try to make it reference historical time.
+    First, I want to allow users to edit the time that has been spent for the day. The edit should update the historical time. The caveat will be that the user cna only subtract as much time as has been spent. I also want to allow them to edit another's day's time by editing the historical time.
+    Right now, if I edit the time, it changes the "current_hours", but it does not update the historical time. It will have to update history["year"]['month']['hours']['secs, min, and hours'].
+    If the user adds more than an hour, a new function will have to add the remaining time to the previous hour and so on. It can be recursive and subtract from the total time, creating a new hour with hours, mins, and secs, each time until no time is left. However, doing this may overwrite a user's previous historical time. Perhaps, if a user adds time, it can be added to an unknown hour. The unknown hours will be added to the rest of time spent. If the user needs to, he will have to go into historical time and change it manually. The program cannot magically know at which hours the time was added.
+    What about for time subtracted? For time subtracted, it will have to be assumed that the user only wants to subtract time because he left the timer running. The only time that can be subtracted will be the time that recently spent. Actually, I see no problem with allowing the user to subtract only the amount of time that was spent for that day. The time will simply be subtracted recursively from the historical time. If the user needs to subtract more, he'll have to go into historical time. In the case of subtracting, it would make most sense to just remove the subtract the historical time.
+    First of all, current_mins,secs,hours will have to first get their time from the day's totals.
+    current_secs,min,hours is not being pulled in from anywhere. It starts from zero and counts up. Very simple. Somewhere in the code (I'll try when update_time is run), I need to add a function that will update the Time Spent time with the historical time. It will need to be one of the first things done.
+
 commit 3ace59449c20b8ae6f2f3fed47ece5eb204937de
 Author: David Richied <davidrichied@gmail.com>
 Date:   Fri Jan 15 15:39:35 2016 -0500
