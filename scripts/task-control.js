@@ -438,9 +438,6 @@ function task_info(task, user_triggered, anim, progress) {
     }
 
 
-    get_day_totals();
-
-
 }
 
 // Display the history for a task

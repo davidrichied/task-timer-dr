@@ -1,0 +1,29 @@
+commit 3ace59449c20b8ae6f2f3fed47ece5eb204937de
+Author: David Richied <davidrichied@gmail.com>
+Date:   Fri Jan 15 15:39:35 2016 -0500
+
+    Added select options for total time spent under History calendar.
+
+commit 5066d7f95bf8bc993b29095b3f0fd4481df7381a
+Author: David Richied <davidrichied@gmail.com>
+Date:   Fri Jan 15 10:45:18 2016 -0500
+
+    All buttons (including delete) work for dropdown options row.
+
+commit e1dcf7ffcb4e66c7c7f80a272f5ce7dc289ac1c0
+Author: David Richied <davidrichied@gmail.com>
+Date:   Fri Jan 15 09:59:41 2016 -0500
+
+    Buttons for dropdown list are now functional, need to modify delete.
+
+commit d1911cc376a8a75a40140194698f81d3687d4a1c
+Author: David Richied <davidrichied@gmail.com>
+Date:   Fri Jan 15 01:02:28 2016 -0500
+
+    Added dropdown box of tasks which update time spent and goal when changed. Buttons not functional.
+
+commit a48efb03056e1d4581692b4ade21c67ed3c71a0a
+Author: David Richied <davidrichied@gmail.com>
+Date:   Thu Jan 14 14:13:54 2016 -0500
+
+    Task Timer is in its original state. First commit.
